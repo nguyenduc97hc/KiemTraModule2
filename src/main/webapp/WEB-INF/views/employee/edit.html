@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Employee</title>
+</head>
+<body>
+<h3>Modify Employee</h3>
+<p>
+    <a th:href="@{/employee/list}">
+        Back to employee list
+    </a>
+</p>
+<th:block th:if="${message}">
+    <p th:text="${message}"></p>
+</th:block>
+<div id="form">
+    <form th:action="@{/employee/update}" th:object="${employee}" enctype="multipart/form-data"
+           method="POST">
+        <input type="hidden" th:field="*{id}"/>
+        <table>
+        <tr>
+            <td>Name</td>
+            <td><input type="text" th:field="*{name}"/></td>
+        </tr>
+        <tr>
+            <td>BirthDate</td>
+            <td><input type="date" th:value="${employee.birthDate}" th:field="*{birthDate}"/></td>
+        </tr>
+        <tr>
+            <td>Address</td>
+            <td><input type="text" th:field="*{address}"/></td>
+        </tr>
+        <tr>
+            <td>Salary</td>
+            <td><input type="text" th:field="*{salary}"/></td>
+        </tr>
+        <tr>
+            <td>Department:</td>
+            <td><select th:field="*{department}">
+                <option th:each="p : ${departments}" th:value="${p.id}" th:text="${p.name}"></option>
+            </select></td>
+        </tr>
+        <tr>
+            <td>Avatar</td>
+            <td><input type="file" th:field="*{avatar}"></td>
+        </tr>
+        </table>
+        <input type="submit" value="Modify"/>
+    </form>
+</div>
+</body>
+</html>

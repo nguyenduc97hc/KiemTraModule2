@@ -7,12 +7,9 @@ import com.codegym.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/department")
@@ -25,13 +22,8 @@ public class DepartmentController {
     private EmployeeService employeeService;
 
     @GetMapping("/list")
-    public ModelAndView listDepartment(@RequestParam ("s")Optional <String> s,Pageable pageable){
-        Page<Department> departments;
-        if (s.isPresent()){
-            departments = departmentService.findAllByNameContaining(s.get(), pageable);
-        }else {
-            departments = departmentService.findAll(pageable);
-        }
+    public ModelAndView listDepartment(Pageable pageable){
+        Page<Department> departments= departmentService.findAll(pageable);;
         ModelAndView modelAndView = new ModelAndView("/department/list");
         modelAndView.addObject("departments", departments);
         return modelAndView;
@@ -106,10 +98,19 @@ public class DepartmentController {
         }else {
             Iterable<Employee> employees = employeeService.findAllByDepartment(department);
 
-            ModelAndView modelAndView = new ModelAndView("/department/information");
+            ModelAndView modelAndView = new ModelAndView("/department/view");
             modelAndView.addObject("department", department);
             modelAndView.addObject("employees", employees);
             return modelAndView;
         }
+    }
+    @GetMapping("/view")
+    public ModelAndView findByDepartment(@RequestParam("s") Long id) {
+        Department department = departmentService.findById(id);
+        Iterable<Employee> employees = employeeService.findAllByDepartment(department);
+        ModelAndView modelAndView = new ModelAndView("/department/view");
+        modelAndView.addObject("employees", employees);
+        modelAndView.addObject("department", department);
+        return modelAndView;
     }
 }

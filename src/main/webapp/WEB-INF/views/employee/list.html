@@ -9,10 +9,12 @@
 <p>
     <a href="/employee/create">Create Employee</a>
 </p>
-<form>
-    Search by name
-    <input type="text" name="s">
-    <input type="submit" value="search">
+<form th:action="@{/department/view/}" method="get">
+    Search by Department
+        <select name="s">
+            <option th:each=" d: ${departments}"  th:value="${d.id}" th:text="${d.name}"></option>
+        </select>
+        <input type="submit" value="search">
 </form>
 <table border="1">
     <tr>

@@ -8,6 +8,7 @@ import com.codegym.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -42,13 +43,8 @@ public class EmployeeController {
 
 
     @GetMapping("/list")
-    public ModelAndView listEmployee(@RequestParam ("s") Optional<String> s, Pageable pageable){
-        Page<Employee> employees;
-        if (s.isPresent()){
-            employees = employeeService.findAllByNameContaining(s.get(),pageable);
-        }else {
-            employees = employeeService.findAll(pageable);
-        }
+    public ModelAndView listEmployee(@PageableDefault(sort = "salary", size = 5, direction = Sort.Direction.DESC) Pageable pageable){
+        Page<Employee> employees =employeeService.findAll(pageable);
         ModelAndView modelAndView = new ModelAndView("/employee/list");
         modelAndView.addObject("employees", employees);
         return modelAndView;
